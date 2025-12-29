@@ -35,13 +35,13 @@ export function getIp(request: FastifyRequest | IncomingMessage) {
 
   let ip: string
     = request.headers['x-forwarded-for']
-    || request.headers['X-Forwarded-For']
-    || request.headers['X-Real-IP']
-    || request.headers['x-real-ip']
-    || req?.ip
-    || req?.raw?.connection?.remoteAddress
-    || req?.raw?.socket?.remoteAddress
-    || undefined
+      || request.headers['X-Forwarded-For']
+      || request.headers['X-Real-IP']
+      || request.headers['x-real-ip']
+      || req?.ip
+      || req?.raw?.connection?.remoteAddress
+      || req?.raw?.socket?.remoteAddress
+      || undefined
   if (ip && ip.split(',').length > 0)
     ip = ip.split(',')[0]
 

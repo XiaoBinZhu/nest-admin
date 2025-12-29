@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm'
 import Redis from 'ioredis'
 import { isEmpty, isNil } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 import { EntityManager, In, Like, Repository } from 'typeorm'
 
 import { InjectRedis } from '~/common/decorators/inject-redis.decorator'
@@ -247,8 +248,11 @@ export class UserService {
    */
   async delete(userIds: number[]): Promise<void | never> {
     const rootUserId = await this.findRootUserId()
-    if (userIds.includes(rootUserId))
-      throw new BadRequestException('不能删除root用户!')
+    if (userIds.includes(rootUserId)) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.CANNOT_DELETE_ROOT_USER', { defaultValue: '不能删除root用户!' }) || '不能删除root用户!'
+      throw new BadRequestException(message)
+    }
 
     await this.userRepository.delete(userIds)
   }

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { I18nContext } from 'nestjs-i18n'
 import { Repository } from 'typeorm'
 
 import { paginate } from '~/helper/paginate'
@@ -24,8 +25,11 @@ export class TodoService {
 
   async detail(id: number): Promise<TodoEntity> {
     const item = await this.todoRepository.findOneBy({ id })
-    if (!item)
-      throw new NotFoundException('未找到该记录')
+    if (!item) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.RECORD_NOT_FOUND', { defaultValue: '未找到该记录' }) || '未找到该记录'
+      throw new NotFoundException(message)
+    }
 
     return item
   }

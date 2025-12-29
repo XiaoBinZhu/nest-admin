@@ -1,0 +1,22 @@
+{
+  "USER_NOT_FOUND": "用户不存在",
+  "INVALID_USERNAME_PASSWORD": "用户名或密码错误",
+  "SERVER_ERROR": "服务器内部错误",
+  "UNAUTHORIZED": "未授权访问",
+  "FORBIDDEN": "禁止访问",
+  "NOT_FOUND": "资源未找到",
+  "BAD_REQUEST": "请求参数错误",
+  "CANNOT_DELETE_ROOT_USER": "不能删除root用户!",
+  "RECORD_NOT_FOUND": "未找到该记录",
+  "TASK_NOT_FOUND": "任务不存在",
+  "TASK_IS_EMPTY": "任务为空",
+  "TASK_START_FAILED": "任务启动失败",
+  "HTTP_REQUEST_JOB_PARAM_EMPTY": "HTTP请求任务参数为空",
+  "EMAIL_SEND_JOB_PARAM_EMPTY": "邮件发送任务参数为空",
+  "SERVICE_NAME_DEFINE_ERROR": "serviceName定义错误",
+  "CRON_EXPRESSION_EMPTY": "cron表达式为空",
+  "ROLE_HAS_ASSOCIATED_USERS": "该角色存在关联用户，无法删除",
+  "MENU_HAS_ASSOCIATED_ROLES": "该菜单存在关联角色，无法删除",
+  "NOT_LOGGED_IN": "未登录",
+  "UID_MISMATCH": "路径参数 uid 与当前 token 登录的用户 uid 不一致"
+}

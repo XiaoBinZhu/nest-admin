@@ -1,0 +1,14 @@
+{
+  "confirmEmail": "Confirm Email",
+  "serverError": "Server Error",
+  "validationError": "Validation Failed",
+  "unauthorized": "Unauthorized",
+  "forbidden": "Forbidden",
+  "notFound": "Not Found",
+  "badRequest": "Bad Request",
+  "fileRequired": "Have not any file to upload!",
+  "invalidRequest": "Request is not multipart",
+  "uploadFailed": "Upload failed",
+  "welcome": "Welcome to nest-admin",
+  "success": "Success"
+}

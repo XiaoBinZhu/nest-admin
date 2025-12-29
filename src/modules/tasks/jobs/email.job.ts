@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
+import { I18nContext } from 'nestjs-i18n'
 
 import { LoggerService } from '~/shared/logger/logger.service'
 import { MailerService } from '~/shared/mailer/mailer.service'
@@ -23,7 +24,9 @@ export class EmailJob {
       this.logger.log(result, EmailJob.name)
     }
     else {
-      throw new BadRequestException('Email send job param is empty')
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.EMAIL_SEND_JOB_PARAM_EMPTY', { defaultValue: 'Email send job param is empty' }) || 'Email send job param is empty'
+      throw new BadRequestException(message)
     }
   }
 }

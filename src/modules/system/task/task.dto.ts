@@ -15,8 +15,9 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator'
-import { CronExpressionParser } from 'cron-parser';
+import { CronExpressionParser } from 'cron-parser'
 import { isEmpty } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 
 import { PagerDto } from '~/common/dto/pager.dto'
 import { IsUnique } from '~/shared/database/constraints/unique.constraint'
@@ -28,8 +29,11 @@ import { TaskEntity } from './task.entity'
 export class IsCronExpression implements ValidatorConstraintInterface {
   validate(value: string, _args: ValidationArguments) {
     try {
-      if (isEmpty(value))
-        throw new BadRequestException('cron expression is empty')
+      if (isEmpty(value)) {
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.CRON_EXPRESSION_EMPTY', { defaultValue: 'cron expression is empty' }) || 'cron expression is empty'
+        throw new BadRequestException(message)
+      }
 
       CronExpressionParser.parse(value)
       return true

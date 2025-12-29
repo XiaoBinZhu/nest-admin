@@ -1,0 +1,22 @@
+{
+  "USER_NOT_FOUND": "User not found",
+  "INVALID_USERNAME_PASSWORD": "Invalid username or password",
+  "SERVER_ERROR": "Internal server error",
+  "UNAUTHORIZED": "Unauthorized",
+  "FORBIDDEN": "Forbidden",
+  "NOT_FOUND": "Not found",
+  "BAD_REQUEST": "Bad request",
+  "CANNOT_DELETE_ROOT_USER": "Cannot delete root user!",
+  "RECORD_NOT_FOUND": "Record not found",
+  "TASK_NOT_FOUND": "Task not found",
+  "TASK_IS_EMPTY": "Task is empty",
+  "TASK_START_FAILED": "Task start failed",
+  "HTTP_REQUEST_JOB_PARAM_EMPTY": "Http request job param is empty",
+  "EMAIL_SEND_JOB_PARAM_EMPTY": "Email send job param is empty",
+  "SERVICE_NAME_DEFINE_ERROR": "serviceName define error",
+  "CRON_EXPRESSION_EMPTY": "cron expression is empty",
+  "ROLE_HAS_ASSOCIATED_USERS": "This role has associated users and cannot be deleted",
+  "MENU_HAS_ASSOCIATED_ROLES": "This menu has associated roles and cannot be deleted",
+  "NOT_LOGGED_IN": "Not logged in",
+  "UID_MISMATCH": "Path parameter uid does not match the uid of the currently logged in user"
+}

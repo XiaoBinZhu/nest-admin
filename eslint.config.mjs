@@ -6,6 +6,9 @@ export default antfu({
     quotes: 'single',
   },
   typescript: true,
+  ignores: [
+    '**/*.md',
+  ],
 }, {
   rules: {
     'no-console': 'off',
@@ -18,5 +21,6 @@ export default antfu({
     'regexp/no-super-linear-backtracking': 'off',
     'regexp/no-contradiction-with-assertion': 'off',
     'ts/no-unused-expressions': 'off',
+    'ts/no-unsafe-function-type': 'off',
   },
 })

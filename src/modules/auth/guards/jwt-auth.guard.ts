@@ -9,6 +9,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { FastifyRequest } from 'fastify'
 import Redis from 'ioredis'
 import { isEmpty, isNil } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 import { ExtractJwt } from 'passport-jwt'
 
 import { InjectRedis } from '~/common/decorators/inject-redis.decorator'
@@ -88,8 +89,11 @@ export class JwtAuthGuard extends AuthGuard(AuthStrategy.JWT) {
       if (isPublic)
         return true
 
-      if (isEmpty(token))
-        throw new UnauthorizedException('未登录')
+      if (isEmpty(token)) {
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.NOT_LOGGED_IN', { defaultValue: '未登录' }) || '未登录'
+        throw new UnauthorizedException(message)
+      }
 
       // 在 handleRequest 中 user 为 null 时会抛出 UnauthorizedException
       if (err instanceof UnauthorizedException)
@@ -108,8 +112,11 @@ export class JwtAuthGuard extends AuthGuard(AuthStrategy.JWT) {
     if (isSse) {
       const { uid } = request.params
 
-      if (Number(uid) !== request.user.uid)
-        throw new UnauthorizedException('路径参数 uid 与当前 token 登录的用户 uid 不一致')
+      if (Number(uid) !== request.user.uid) {
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.UID_MISMATCH', { defaultValue: '路径参数 uid 与当前 token 登录的用户 uid 不一致' }) || '路径参数 uid 与当前 token 登录的用户 uid 不一致'
+        throw new UnauthorizedException(message)
+      }
     }
 
     const pv = await this.authService.getPasswordVersionByUid(request.user.uid)

@@ -12,6 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Queue } from 'bull'
 import Redis from 'ioredis'
 import { isEmpty, isNil } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 import { Like, Repository } from 'typeorm'
 import { InjectRedis } from '~/common/decorators/inject-redis.decorator'
 
@@ -42,7 +43,7 @@ export class TaskService implements OnModuleInit {
     private moduleRef: ModuleRef,
     private reflector: Reflector,
     @InjectRedis() private redis: Redis,
-  ) {}
+  ) { }
 
   /**
    * module init
@@ -119,8 +120,11 @@ export class TaskService implements OnModuleInit {
       .where({ id })
       .getOne()
 
-    if (!task)
-      throw new NotFoundException('Task Not Found')
+    if (!task) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_NOT_FOUND', { defaultValue: 'Task Not Found' }) || 'Task Not Found'
+      throw new NotFoundException(message)
+    }
 
     return task
   }
@@ -129,8 +133,11 @@ export class TaskService implements OnModuleInit {
    * delete task
    */
   async delete(task: TaskEntity): Promise<void> {
-    if (!task)
-      throw new BadRequestException('Task is Empty')
+    if (!task) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_IS_EMPTY', { defaultValue: 'Task is Empty' }) || 'Task is Empty'
+      throw new BadRequestException(message)
+    }
 
     await this.stop(task)
     await this.taskRepository.delete(task.id)
@@ -147,7 +154,9 @@ export class TaskService implements OnModuleInit {
       )
     }
     else {
-      throw new BadRequestException('Task is Empty')
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_IS_EMPTY', { defaultValue: 'Task is Empty' }) || 'Task is Empty'
+      throw new BadRequestException(message)
     }
   }
 
@@ -173,8 +182,11 @@ export class TaskService implements OnModuleInit {
    * 启动任务
    */
   async start(task: TaskEntity): Promise<void> {
-    if (!task)
-      throw new BadRequestException('Task is Empty')
+    if (!task) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_IS_EMPTY', { defaultValue: 'Task is Empty' }) || 'Task is Empty'
+      throw new BadRequestException(message)
+    }
 
     // 先停掉之前存在的任务
     await this.stop(task)
@@ -216,7 +228,9 @@ export class TaskService implements OnModuleInit {
       await this.taskRepository.update(task.id, {
         status: TaskStatus.Disabled,
       })
-      throw new BadRequestException('Task Start failed')
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_START_FAILED', { defaultValue: 'Task Start failed' }) || 'Task Start failed'
+      throw new BadRequestException(message)
     }
   }
 
@@ -224,8 +238,11 @@ export class TaskService implements OnModuleInit {
    * 停止任务
    */
   async stop(task: TaskEntity): Promise<void> {
-    if (!task)
-      throw new BadRequestException('Task is Empty')
+    if (!task) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.TASK_IS_EMPTY', { defaultValue: 'Task is Empty' }) || 'Task is Empty'
+      throw new BadRequestException(message)
+    }
 
     const exist = await this.existJob(task.id.toString())
     if (!exist) {
@@ -303,8 +320,11 @@ export class TaskService implements OnModuleInit {
         service = nameOrInstance
 
       // 所执行的任务不存在
-      if (!service || !(exec in service))
-        throw new NotFoundException('任务不存在')
+      if (!service || !(exec in service)) {
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.TASK_NOT_FOUND', { defaultValue: '任务不存在' }) || '任务不存在'
+        throw new NotFoundException(message)
+      }
 
       // 检测是否有Mission注解
       const hasMission = this.reflector.get<boolean>(
@@ -318,7 +338,9 @@ export class TaskService implements OnModuleInit {
     catch (e) {
       if (e instanceof UnknownElementException) {
         // 任务不存在
-        throw new NotFoundException('任务不存在')
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.TASK_NOT_FOUND', { defaultValue: '任务不存在' }) || '任务不存在'
+        throw new NotFoundException(message)
       }
       else {
         // 其余错误则不处理，继续抛出
@@ -333,8 +355,11 @@ export class TaskService implements OnModuleInit {
   async callService(name: string, args: string): Promise<void> {
     if (name) {
       const [serviceName, methodName] = name.split('.')
-      if (!methodName)
-        throw new BadRequestException('serviceName define BadRequestException')
+      if (!methodName) {
+        const i18n = I18nContext.current()
+        const message = i18n?.t('error.SERVICE_NAME_DEFINE_ERROR', { defaultValue: 'serviceName define error' }) || 'serviceName define error'
+        throw new BadRequestException(message)
+      }
 
       const service = await this.moduleRef.get(serviceName, {
         strict: false,

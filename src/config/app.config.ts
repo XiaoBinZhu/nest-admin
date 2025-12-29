@@ -13,6 +13,9 @@ export const AppConfig = registerAs(appRegToken, () => ({
   locale: env('APP_LOCALE', 'zh-CN'),
   /** 是否允许多端登录 */
   multiDeviceLogin: envBoolean('MULTI_DEVICE_LOGIN', true),
+  /** I18N 配置 */
+  fallbackLanguage: env('APP_FALLBACK_LANGUAGE', 'zh'),
+  headerLanguage: env('APP_HEADER_LANGUAGE', 'x-custom-lang'),
 
   logger: {
     level: env('LOGGER_LEVEL'),

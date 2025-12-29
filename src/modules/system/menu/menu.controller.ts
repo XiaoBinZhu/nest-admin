@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { flattenDeep } from 'lodash'
+import { I18nContext } from 'nestjs-i18n'
 
 import { ApiResult } from '~/common/decorators/api-result.decorator'
 import { IdParam } from '~/common/decorators/id-param.decorator'
@@ -87,8 +88,11 @@ export class MenuController {
   @ApiOperation({ summary: '删除菜单或权限' })
   @Perm(permissions.DELETE)
   async delete(@IdParam() id: number): Promise<void> {
-    if (await this.menuService.checkRoleByMenuId(id))
-      throw new BadRequestException('该菜单存在关联角色，无法删除')
+    if (await this.menuService.checkRoleByMenuId(id)) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.MENU_HAS_ASSOCIATED_ROLES', { defaultValue: '该菜单存在关联角色，无法删除' }) || '该菜单存在关联角色，无法删除'
+      throw new BadRequestException(message)
+    }
 
     // 如果有子目录，一并删除
     const childMenus = await this.menuService.findChildMenus(id)

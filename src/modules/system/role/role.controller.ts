@@ -11,6 +11,7 @@ import {
   Query,
 } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { I18nContext } from 'nestjs-i18n'
 
 import { ApiResult } from '~/common/decorators/api-result.decorator'
 import { IdParam } from '~/common/decorators/id-param.decorator'
@@ -81,8 +82,11 @@ export class RoleController {
   @ApiOperation({ summary: '删除角色' })
   @Perm(permissions.DELETE)
   async delete(@IdParam() id: number): Promise<void> {
-    if (await this.roleService.checkUserByRoleId(id))
-      throw new BadRequestException('该角色存在关联用户，无法删除')
+    if (await this.roleService.checkUserByRoleId(id)) {
+      const i18n = I18nContext.current()
+      const message = i18n?.t('error.ROLE_HAS_ASSOCIATED_USERS', { defaultValue: '该角色存在关联用户，无法删除' }) || '该角色存在关联用户，无法删除'
+      throw new BadRequestException(message)
+    }
 
     await this.roleService.delete(id)
     await this.menuService.refreshOnlineUserPerms(false)

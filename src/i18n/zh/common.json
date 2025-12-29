@@ -1,0 +1,14 @@
+{
+  "confirmEmail": "确认邮箱",
+  "serverError": "服务器错误",
+  "validationError": "验证失败",
+  "unauthorized": "未授权",
+  "forbidden": "禁止访问",
+  "notFound": "资源未找到",
+  "badRequest": "请求错误",
+  "fileRequired": "没有文件需要上传",
+  "invalidRequest": "请求格式不正确",
+  "uploadFailed": "上传失败",
+  "welcome": "欢迎使用 nest-admin",
+  "success": "操作成功"
+}
