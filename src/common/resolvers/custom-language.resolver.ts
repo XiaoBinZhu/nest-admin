@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { FastifyRequest } from 'fastify'
 import { I18nResolver } from 'nestjs-i18n'
+import { ConfigKeyPaths } from '~/config'
 
 /**
  * 自定义语言解析器
@@ -32,7 +34,12 @@ import { I18nResolver } from 'nestjs-i18n'
  */
 @Injectable()
 export class CustomLanguageResolver implements I18nResolver {
-  constructor(private readonly headerName: string = 'x-custom-lang') {}
+  private readonly headerName: string
+
+  constructor(private readonly configService: ConfigService<ConfigKeyPaths>) {
+    const appConfig = this.configService.get('app')
+    this.headerName = appConfig?.headerLanguage || 'x-custom-lang'
+  }
 
   /**
    * 解析请求语言

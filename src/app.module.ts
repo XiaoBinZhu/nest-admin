@@ -107,14 +107,7 @@ import { SocketModule } from './socket/socket.module'
         }
       },
       resolvers: [
-        {
-          use: CustomLanguageResolver,
-          useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
-            const appConfig = configService.get('app')!
-            return new CustomLanguageResolver(appConfig.headerLanguage || 'x-custom-lang')
-          },
-          inject: [ConfigService],
-        },
+        CustomLanguageResolver,
       ],
     }),
 
